@@ -1,0 +1,21 @@
+# Backup files
+*~
+*.bak
+
+# GNU nano
+nano.save
+
+# Vim
+*.s[a-w][a-p]
+!*.sql
+
+# PyCharm
+.idea/
+*.iml
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+
+# supybot-test
+test-*/
