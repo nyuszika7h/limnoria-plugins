@@ -1,4 +1,4 @@
-This is a collection of my Limnoria plugins.
+This is a collection of my plugins for Limnoria.
 
-Stock Supybot is not explicitly supported. You shouldn't be using it anyway,
-it's full of vulnerabilities.
+Unless otherwise noted, the plugins are written for Python 3 and Limnoria.
+Support for Python 2 and stock Supybot is not guaranteed.
