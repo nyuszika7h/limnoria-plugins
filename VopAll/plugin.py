@@ -48,7 +48,10 @@ class VopAll(callbacks.Plugin):
         if the message isn't sent in the channel itself.
         """
 
-        for batch in self._split_modes(irc.state.channels[channel].users):
+        chanstate = irc.state.channels[channel]
+        users = [user for user in chanstate.users if not chanstate.isVoice(user)]
+
+        for batch in self._split_modes(users):
             irc.queueMsg(ircmsgs.voices(channel, batch))
 
     @wrap(['op', 'channel'])
@@ -59,7 +62,10 @@ class VopAll(callbacks.Plugin):
         if the message isn't sent in the channel itself.
         """
 
-        for batch in self._split_modes(irc.state.channels[channel].users):
+        chanstate = irc.state.channels[channel]
+        users = [user for user in chanstate.users if chanstate.isVoice(user)]
+
+        for batch in self._split_modes(users):
             irc.queueMsg(ircmsgs.devoices(channel, batch))
 
     @wrap(['op', 'channel'])
@@ -70,7 +76,10 @@ class VopAll(callbacks.Plugin):
         if the message isn't sent in the channel itself.
         """
 
-        for batch in self._split_modes(irc.state.channels[channel].users):
+        chanstate = irc.state.channels[channel]
+        users = [user for user in chanstate.users if not chanstate.isOp(user)]
+
+        for batch in self._split_modes(users):
             irc.queueMsg(ircmsgs.ops(channel, batch))
 
     @wrap([getopts({'include-self': ''}), 'op', 'channel'])
@@ -82,9 +91,10 @@ class VopAll(callbacks.Plugin):
         if the message isn't sent in the channel itself.
         """
 
-        users = list(irc.state.channels[channel].users)
+        chanstate = irc.state.channels[channel]
+        users = [user for user in chanstate.users if chanstate.isOp(user)]
 
-        if not include_self:
+        if irc.nick in users and not include_self:
             users.remove(irc.nick)
 
         for batch in self._split_modes(users):
