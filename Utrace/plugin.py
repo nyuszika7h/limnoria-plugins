@@ -44,14 +44,16 @@ class Utrace(callbacks.Plugin):
     """
     This plugin provides a command to look up the approximate geographical
     location of hosts using utrace.de's API. Please note that the API only
-    allows 100 requests per day from the same IP address.
+    supports IPv4 addresses and it allows at most 100 requests per day
+    from the same IP address.
     """
 
     @wrap(['somethingWithoutSpaces'])
     def utrace(self, irc, msg, args, address):
         """<address>
 
-        Looks up <address> using utrace.de's API.
+        Looks up <address>, which can be either a hostname or an IPv4 address,
+        using utrace.de's API.
         """
 
         self.log.info(_('Looking up %s on utrace.de'), address)

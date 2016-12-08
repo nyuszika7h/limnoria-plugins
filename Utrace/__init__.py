@@ -22,7 +22,8 @@
 """
 This plugin provides a command to look up the approximate geographical
 location of hosts using utrace.de's API. Please note that the API only
-allows 100 requests per day from the same IP address.
+supports IPv4 addresses and it allows at most 100 requests per day
+from the same IP address.
 """
 
 from imp import reload
