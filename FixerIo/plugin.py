@@ -20,6 +20,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import json
+import re
 from types import SimpleNamespace
 
 import requests
@@ -44,6 +45,10 @@ def getPositiveFloat(irc, msg, args, state, type=_('positive floating point numb
 
 
 commands.addConverter('positiveFloat', getPositiveFloat)
+
+
+def s(x):
+    return re.sub(r"\s+", " ", x).strip()
 
 
 class FixerIo(callbacks.Plugin):
@@ -91,13 +96,25 @@ class FixerIo(callbacks.Plugin):
         be 1 and the base exchange rate will be returned.
         """
 
+        source = source.upper()
+        target = target.upper()
+
+        err = None
+
+        if (source not in self.data.rates) and (target not in self.data.rates):
+            err = "Unknown currencies: %r and %r. " % (source, target)
+
         try:
             result = amount * self._exchangeRate(source, target)
         except KeyError as e:
-            irc.error(_(
-                'Unknown currency: %r. Please use the three-letter (ISO 4217) '
-                'currency code. See http://www.xe.com/iso4217.php '
-                'for a list.') % e.args[0], Raise=True)
+            if not err:
+                err = "Unknown currency: %r. " % e.args[0]
+
+            err += s("""Please use three-letter (ISO 4217) currency codes
+listed on the European Central Bank's website (https://v.gd/ecbcurrencies).
+Other currencies are not currently supported by this plugin.""")
+
+            irc.error(err, Raise=True)
 
         irc.reply('%.2f %s = %.2f %s (as of %s)' % (
             amount, source, result, target, self.data.date))
