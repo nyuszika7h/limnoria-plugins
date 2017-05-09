@@ -25,10 +25,16 @@ from types import SimpleNamespace
 
 import requests
 
-from supybot import callbacks, commands, i18n, schedule
-from supybot.commands import optional, wrap
+from supybot import callbacks, commands, schedule
+from supybot.commands import *
 
-_ = i18n.PluginInternationalization('FixerIo')
+try:
+    from supybot.i18n import PluginInternationalization
+    _ = PluginInternationalization('Template')
+except ImportError:
+    # Placeholder that allows to run the plugin
+    # on a bot without the i18n module
+    _ = lambda x: x
 
 
 def getPositiveFloat(irc, msg, args, state, type=_('positive floating point number')):
@@ -102,13 +108,14 @@ class FixerIo(callbacks.Plugin):
         err = None
 
         if (source not in self.data.rates) and (target not in self.data.rates):
-            err = "Unknown currencies: %r and %r. " % (source, target)
+            err = "Unknown currencies: {0!r} and {1!r}. ".format(
+                source, target)
 
         try:
             result = amount * self._exchangeRate(source, target)
         except KeyError as e:
             if not err:
-                err = "Unknown currency: %r. " % e.args[0]
+                err = "Unknown currency: {0!r}. ".format(e.args[0])
 
             err += s("""Please use three-letter (ISO 4217) currency codes
 listed on the European Central Bank's website (https://v.gd/ecbcurrencies).
@@ -116,8 +123,9 @@ Other currencies are not currently supported by this plugin.""")
 
             irc.error(err, Raise=True)
 
-        irc.reply('%.2f %s = %.2f %s (as of %s)' % (
-            amount, source, result, target, self.data.date))
+        irc.reply('{0:.{p}f} {1} = {1:.{p}f} {2} (as of {3})'.format(
+            amount, source, target, self.data.date,
+            p=self.registryValue('precision'))
 
     @wrap([('checkCapability', 'admin')])
     def update(self, irc, msg, args):
@@ -133,3 +141,6 @@ Other currencies are not currently supported by this plugin.""")
 
 
 Class = FixerIo
+
+
+# vim:set tabstop=4 shiftwidth=4 softtabstop=0 expandtab textwidth=79:

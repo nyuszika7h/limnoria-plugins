@@ -19,37 +19,35 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-This plugin provides currency conversion through Fixer.io's free JSON API.
-"""
+from supybot import conf, registry
 
-import supybot
+try:
+    from supybot.i18n import PluginInternationalization
+    _ = PluginInternationalization('FixerIo')
+except:
+    # Placeholder that allows to run the plugin
+    # on a bot without the i18n module
+    _ = lambda x: x
 
-__version__ = ''
 
-__author__ = supybot.Author('nyuszika7h', 'nyuszika7h', 'nyuszika7h@gmail.com')
+def configure(advanced):
+    # This will be called by supybot-wizard to configure this module.
+    # 'advanced' is a bool that specifies whether the user identified
+    # themself as an advanced user or not.  You should effect your
+    # configuration by manipulating the registry as appropriate.
 
-# This is a dictionary mapping supybot.Author instances
-# to lists of contributions.
-__contributors__ = {}
+    from supybot.questions import expect, anything, something, yn
+    conf.registerPlugin('FixerIo', True)
 
-__url__ = ''
 
-from . import config, plugin
-from imp import reload
+FixerIo = conf.registerPlugin('FixerIo')
 
-# In case we're being reloaded.
-reload(config)
-reload(plugin)
-
-# Add more reloads here if you add third-party modules and want them to be
-# reloaded when this plugin is reloaded.  Don't forget to import them as well!
-
-if supybot.world.testing:
-    from . import test
-
-Class = plugin.Class
-configure = config.configure
+# This is where your configuration variables (if any) should go. For example:
+# conf.registerGlobalValue(FixerIo, 'someConfigVariableName',
+#     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
+conf.registerChannelValue(FixerIo, 'precision',
+      registry.Integer(2, _("""Determines the number of decimal places to use
+      for the exchanged currency values.""")))
 
 
 # vim:set tabstop=4 shiftwidth=4 softtabstop=0 expandtab textwidth=79:
