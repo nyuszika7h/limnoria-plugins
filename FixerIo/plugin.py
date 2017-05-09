@@ -123,9 +123,9 @@ Other currencies are not currently supported by this plugin.""")
 
             irc.error(err, Raise=True)
 
-        irc.reply('{0:.{p}f} {1} = {1:.{p}f} {2} (as of {3})'.format(
-            amount, source, target, self.data.date,
-            p=self.registryValue('precision'))
+        irc.reply('{0:.{p}f} {1} = {2:.{p}f} {3} (as of {4})'.format(
+            amount, source, result, target, self.data.date,
+            p=self.registryValue('precision')))
 
     @wrap([('checkCapability', 'admin')])
     def update(self, irc, msg, args):
