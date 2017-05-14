@@ -141,12 +141,12 @@ class CurrencyConverter(callbacks.Plugin):
         precision = self.registryValue('precision')
         fixedRound = self.registryValue('fixedRound')
 
-        amount = str(self._round(amount, precision, fixedRound))
-        result = str(self._round(result, precision, fixedRound))
+        amount = '{0:,}'.format(self._round(amount, precision, fixedRound))
+        result = '{0:,}'.format(self._round(result, precision, fixedRound))
 
         if not fixedRound:
-            amount = re.sub(r'\.0$', '', amount)
-            result = re.sub(r'\.0$', '', result)
+            amount = re.sub(r'\.0$', '', str(amount))
+            result = re.sub(r'\.0$', '', str(result))
 
         if cached:
             cachedText = ' (cached {0})'.format(arrow.get(cached).humanize())
