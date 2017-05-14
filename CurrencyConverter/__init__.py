@@ -19,11 +19,38 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from supybot.test import *
+"""
+This plugin provides currency conversion through the free JSON API
+at free.currencyconverterapi.com.
+"""
 
+import imp
 
-class TemplateTestCase(PluginTestCase):
-    plugins = ('Template',)
+import supybot
+
+__version__ = ''
+
+__author__ = supybot.Author('nyuszika7h', 'nyuszika7h', 'nyuszika7h@gmail.com')
+
+# This is a dictionary mapping supybot.Author instances
+# to lists of contributions.
+__contributors__ = {}
+
+__url__ = ''
+
+from . import config, plugin
+
+# In case we're being reloaded.
+imp.reload(config)
+imp.reload(plugin)
+# Add more reloads here if you add third-party modules and want them to be
+# reloaded when this plugin is reloaded.  Don't forget to import them as well!
+
+if supybot.world.testing:
+    from . import test
+
+Class = plugin.Class
+configure = config.configure
 
 
 # vim:set tabstop=4 shiftwidth=4 softtabstop=0 expandtab textwidth=79:

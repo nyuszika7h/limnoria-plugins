@@ -23,7 +23,7 @@ from supybot import conf, registry
 
 try:
     from supybot.i18n import PluginInternationalization
-    _ = PluginInternationalization('FixerIo')
+    _ = PluginInternationalization('CurrencyConverter')
 except:
     # Placeholder that allows to run the plugin
     # on a bot without the i18n module
@@ -37,17 +37,23 @@ def configure(advanced):
     # configuration by manipulating the registry as appropriate.
 
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('FixerIo', True)
+    conf.registerPlugin('CurrencyConverter', True)
 
 
-FixerIo = conf.registerPlugin('FixerIo')
+CurrencyConverter = conf.registerPlugin('CurrencyConverter')
 
 # This is where your configuration variables (if any) should go. For example:
-# conf.registerGlobalValue(FixerIo, 'someConfigVariableName',
+# conf.registerGlobalValue(CurrencyConverter, 'someConfigVariableName',
 #     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
-conf.registerChannelValue(FixerIo, 'precision',
-      registry.Integer(2, _("""Determines the number of decimal places to use
-      for the exchanged currency values.""")))
+conf.registerChannelValue(CurrencyConverter, 'precision',
+    registry.Integer(3, _("""Determines the number of significant figures
+    (or decimal points if 'fixedRound' is True) to round the output to.
+    Note that numbers which have no digits after the decimal point are never
+    further rounded.""")))
+conf.registerChannelValue(CurrencyConverter, 'fixedRound',
+    registry.Boolean(False, _("""Determines whether the output should be
+    rounded to a fixed number of decimal places specified by 'precision'
+    rather than significant figures.""")))
 
 
 # vim:set tabstop=4 shiftwidth=4 softtabstop=0 expandtab textwidth=79:
