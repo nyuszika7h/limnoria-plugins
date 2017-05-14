@@ -145,8 +145,8 @@ class CurrencyConverter(callbacks.Plugin):
         result = str(self._round(result, precision, fixedRound))
 
         if not fixedRound:
-            amount = amount.rstrip('.0')
-            result = result.rstrip('.0')
+            amount = re.sub(r'\.0$', '', amount)
+            result = re.sub(r'\.0$', '', result)
 
         if cached:
             cachedText = ' (cached {0})'.format(arrow.get(cached).humanize())
