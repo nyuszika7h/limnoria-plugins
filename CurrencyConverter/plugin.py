@@ -25,6 +25,7 @@ import re
 import time
 from types import SimpleNamespace
 
+import arrow
 import requests
 
 from supybot import callbacks, commands, schedule
@@ -90,7 +91,8 @@ class CurrencyConverter(callbacks.Plugin):
 
         if (fq in self.cache
                 and time.time() < self.cache[fq]['lastUpdate'] + 1800):
-            return (self.cache[fq]['exchangeRate'] * amount, True)
+            return (self.cache[fq]['exchangeRate'] * amount,
+                    self.cache[fq]['lastUpdate'])
         else:
             r = requests.get('http://free.currencyconverterapi.com/api/v3/convert',
                              params={'q': q,
@@ -109,7 +111,7 @@ class CurrencyConverter(callbacks.Plugin):
             self.cache[rq] = {'exchangeRate': revRate,
                               'lastUpdate': t}
 
-            return (fwdRate * amount, False)
+            return (fwdRate * amount, None)
 
     @wrap([optional('positiveFloat', 1), 'something', 'to', 'something'])
     def exchange(self, irc, msg, args, amount, source, target):
@@ -146,8 +148,13 @@ class CurrencyConverter(callbacks.Plugin):
             amount = amount.rstrip('.0')
             result = result.rstrip('.0')
 
+        if cached:
+            cachedText = ' (cached {0})'.format(arrow.get(cached).humanize())
+        else:
+            cachedText = ''
+
         irc.reply('{0} {1} = {2} {3}{4}'.format(
-            amount, source, result, target, ' (cached)' if cached else ''))
+            amount, source, result, target, cachedText))
 
 
 Class = CurrencyConverter
