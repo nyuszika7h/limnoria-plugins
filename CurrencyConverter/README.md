@@ -11,4 +11,4 @@ This means that, for example, if you convert between USD and EUR,
 the exchange rate from USD to EUR and the reverse (EUR to USD) will be cached,
 and if another conversion is made within the refresh interval,
 it won't be re-requested from the API. This cache will also be cleared
-if you reload the plugin or restart th bot.
+if you reload the plugin or restart the bot.
