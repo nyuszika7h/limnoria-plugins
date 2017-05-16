@@ -23,6 +23,7 @@ import json
 import math
 import re
 import time
+import traceback
 from types import SimpleNamespace
 
 import arrow
@@ -74,6 +75,7 @@ class CurrencyConverter(callbacks.Plugin):
         self.__parent = super(CurrencyConverter, self)
         self.__parent.__init__(irc)
 
+        self.irc = irc
         self.cache = {}
 
     @staticmethod
@@ -94,24 +96,33 @@ class CurrencyConverter(callbacks.Plugin):
             return (self.cache[fq]['exchangeRate'] * amount,
                     self.cache[fq]['lastUpdate'])
         else:
-            r = requests.get('http://free.currencyconverterapi.com/api/v3/convert',
-                             params={'q': q,
-                                     'compact': 'ultra'})
+            try:
+                r = requests.get('http://free.currencyconverterapi.com/api/v3/convert',
+                                 params={'q': q,
+                                         'compact': 'ultra'})
 
-            data = r.json()
+                data = r.json()
 
-            fwdRate = data[fq]
-            revRate = data[rq]
+                fwdRate = data[fq]
+                revRate = data[rq]
 
-            t = time.time()
+                t = time.time()
 
-            self.cache[fq] = {'exchangeRate': fwdRate,
-                              'lastUpdate': t}
+                self.cache[fq] = {'exchangeRate': fwdRate,
+                                  'lastUpdate': t}
 
-            self.cache[rq] = {'exchangeRate': revRate,
-                              'lastUpdate': t}
+                self.cache[rq] = {'exchangeRate': revRate,
+                                  'lastUpdate': t}
 
-            return (fwdRate * amount, None)
+                return (fwdRate * amount, None)
+            except Exception as e:
+                if fq in self.cache:
+                    self.irc.error('{0.__class__.__name__}: {0}'.format(e))
+
+                    traceback.print_exc()
+
+                    return (self.cache[fq]['exchangeRate'] * amount,
+                            self.cache[fq]['lastUpdate'])
 
     @wrap([optional('positiveFloat', 1), 'something', 'to', 'something'])
     def exchange(self, irc, msg, args, amount, source, target):
