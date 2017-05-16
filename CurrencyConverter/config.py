@@ -48,12 +48,17 @@ CurrencyConverter = conf.registerPlugin('CurrencyConverter')
 conf.registerChannelValue(CurrencyConverter, 'precision',
     registry.Integer(3, _("""Determines the number of significant figures
     (or decimal points if 'fixedRound' is True) to round the output to.
-    Note that numbers which have no digits after the decimal point are never
-    further rounded.""")))
+    Note that numbers which have no digits after the decimal point are
+    never further rounded.""")))
 conf.registerChannelValue(CurrencyConverter, 'fixedRound',
     registry.Boolean(False, _("""Determines whether the output should be
     rounded to a fixed number of decimal places specified by 'precision'
     rather than significant figures.""")))
+conf.registerChannelValue(CurrencyConverter, 'refreshInterval',
+    registry.Integer(1800, _("""Determines how long (in seconds) exchange rates
+    are cached by the bot when converting between the same currencies that were
+    already requested recently. See README.md in the plugin's directory
+    for a more detailed explanation.""")))
 
 
 # vim:set tabstop=4 shiftwidth=4 softtabstop=0 expandtab textwidth=79:

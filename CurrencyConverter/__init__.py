@@ -20,8 +20,8 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-This plugin provides currency conversion through the free JSON API
-at free.currencyconverterapi.com.
+This plugin provides currency conversion
+through the free JSON API at free.currencyconverterapi.com.
 """
 
 import imp

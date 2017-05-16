@@ -67,8 +67,8 @@ http://www.xe.com/iso4217.php#section2 for valid currency codes.
 
 class CurrencyConverter(callbacks.Plugin):
     """
-    This plugin provides currency conversion through the free JSON API
-    at free.currencyconverterapi.com.
+    This plugin provides currency conversion
+    through the free JSON API at free.currencyconverterapi.com.
     """
 
     def __init__(self, irc):
@@ -92,7 +92,8 @@ class CurrencyConverter(callbacks.Plugin):
         q = ','.join((fq, rq))
 
         if (fq in self.cache
-                and time.time() < self.cache[fq]['lastUpdate'] + 1800):
+                and time.time() < (self.cache[fq]['lastUpdate'] +
+                                   self.registryValue('refreshInterval'))):
             return (self.cache[fq]['exchangeRate'] * amount,
                     self.cache[fq]['lastUpdate'])
         else:
