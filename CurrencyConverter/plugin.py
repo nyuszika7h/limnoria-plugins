@@ -124,6 +124,8 @@ class CurrencyConverter(callbacks.Plugin):
 
                     return (self.cache[fq]['exchangeRate'] * amount,
                             self.cache[fq]['lastUpdate'])
+                else:
+                    raise
 
     @wrap([optional('positiveFloat', 1), 'something', 'to', 'something'])
     def exchange(self, irc, msg, args, amount, source, target):
