@@ -103,7 +103,7 @@ class Utrace(callbacks.Plugin):
             if not value:
                 info[key] = '(none)'
 
-        self.log.info(_('Utrace: %d out of 100 queries used'), info['queries'])
+        self.log.info(_('Utrace: %d out of 100 queries used') % info['queries'])
 
         irc.reply(_trim("""
             IP: %(ip)s
