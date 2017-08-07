@@ -127,9 +127,9 @@ class CurrencyConverter(callbacks.Plugin):
                 else:
                     raise
 
-    @wrap([optional('positiveFloat', 1), 'something', 'to', 'something'])
-    def exchange(self, irc, msg, args, amount, source, target):
-        """[<amount>] <source currency> [to] <target currency>
+    @wrap([optional('positiveFloat', 1), 'something', optional(('literal', ('in', 'to'))), 'something'])
+    def exchange(self, irc, msg, args, amount, source, _, target):
+        """[<amount>] <source currency> [in|to] <target currency>
 
         Converts <amount> of <source currency> to <target currency>
         through the free JSON API at free.currencyconverterapi.com.
