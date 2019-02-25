@@ -98,9 +98,11 @@ class CurrencyConverter(callbacks.Plugin):
                     self.cache[fq]['lastUpdate'])
         else:
             try:
-                r = requests.get('http://free.currencyconverterapi.com/api/v3/convert',
+                r = requests.get('https://free.currencyconverterapi.com/api/v6/convert',
                                  params={'q': q,
-                                         'compact': 'ultra'})
+                                         'compact': 'ultra',
+                                         'apiKey': self.registryValue('apiKey')})
+                r.raise_for_status()
 
                 data = r.json()
 

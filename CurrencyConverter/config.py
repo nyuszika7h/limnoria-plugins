@@ -45,6 +45,9 @@ CurrencyConverter = conf.registerPlugin('CurrencyConverter')
 # This is where your configuration variables (if any) should go. For example:
 # conf.registerGlobalValue(CurrencyConverter, 'someConfigVariableName',
 #     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
+conf.registerGlobalValue(CurrencyConverter, 'apiKey',
+    registry.String('', _("""Determines the API key to use for the service."""),
+    private=True))
 conf.registerChannelValue(CurrencyConverter, 'precision',
     registry.Integer(3, _("""Determines the number of significant figures
     (or decimal points if 'fixedRound' is True) to round the output to.
