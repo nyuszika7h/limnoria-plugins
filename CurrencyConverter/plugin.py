@@ -133,7 +133,7 @@ class CurrencyConverter(callbacks.Plugin):
 
     @wrap([optional('positiveFloat', 1), 'something', optional(('literal', ('in', 'to'))), 'something'])
     def exchange(self, irc, msg, args, amount, source, _, target):
-        """[<amount>] <source currency> [to] <target currency>
+        """[<amount>] <source currency> [in|to] <target currency>
 
         Converts <amount> of <source currency> to <target currency>
         through the free JSON API at free.currencyconverterapi.com.
