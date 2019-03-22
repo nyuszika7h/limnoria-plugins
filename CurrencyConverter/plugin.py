@@ -1,4 +1,4 @@
-# Copyright 2017, nyuszika7h <nyuszika7h@openmailbox.org>
+# Copyright 2017, nyuszika7h <nyuszika7h@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,12 +19,11 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import json
+import httplib
 import math
 import re
 import time
 import traceback
-from types import SimpleNamespace
 
 import arrow
 import requests
@@ -118,10 +117,13 @@ class CurrencyConverter(callbacks.Plugin):
                                   'lastUpdate': t}
 
                 return (fwdRate * amount, None)
+            except requests.exceptions.HTTPError:
+                status_name = httplib.responses[r.status_code]
+                self.irc.error(f'HTTP Error {r.status_code}: {status_name}')
+                traceback.print_exc()
             except Exception as e:
                 if fq in self.cache:
                     self.irc.error('{0.__class__.__name__}: {0}'.format(e))
-
                     traceback.print_exc()
 
                     return (self.cache[fq]['exchangeRate'] * amount,
@@ -131,7 +133,7 @@ class CurrencyConverter(callbacks.Plugin):
 
     @wrap([optional('positiveFloat', 1), 'something', optional(('literal', ('in', 'to'))), 'something'])
     def exchange(self, irc, msg, args, amount, source, _, target):
-        """[<amount>] <source currency> [in|to] <target currency>
+        """[<amount>] <source currency> [to] <target currency>
 
         Converts <amount> of <source currency> to <target currency>
         through the free JSON API at free.currencyconverterapi.com.
