@@ -1,4 +1,4 @@
-# Copyright 2016, nyuszika7h <nyuszika7h@openmailbox.org>
+# Copyright 2016, nyuszika7h <nyuszika7h@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -30,7 +30,7 @@ import supybot
 from . import plugin
 
 __version__ = ''
-__author__ = supybot.Author('nyuszika7h', 'nyuszika7h', 'nyuszika7h@openmailbox.org')
+__author__ = supybot.Author('nyuszika7h', 'nyuszika7h', 'nyuszika7h@gmail.com')
 __contributors__ = {}
 __url__ = ''
 
